@@ -6,7 +6,7 @@
         <parameter name="Version" value="10"/>
         <parameter name="URL" value="http://127.0.0.1:4723/wd/hub"/>
         <classes>
-            <class name="RentalCaTests"/>
+            <class name="RentalCarTests"/>
         </classes>
     </test> <!--Test1 -->
     <test name="Test2">
@@ -14,7 +14,7 @@
         <parameter name="Version" value="10"/>
         <parameter name="URL" value="http://127.0.0.1:4733/wd/hub"/>
         <classes>
-            <class name="RentalCaTests"/>
+            <class name="RentalCarTests"/>
         </classes>
     </test> <!--Test 2 -->
 </suite>

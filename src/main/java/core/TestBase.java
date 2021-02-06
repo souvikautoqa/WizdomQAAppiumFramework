@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class TestBase {
 
    //public AndroidDriver<MobileElement> driver;
-   AppiumDriver driver;
+   protected AppiumDriver driver;
 
 
     //@BeforeSuite
@@ -34,9 +35,9 @@ public class TestBase {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    @Parameters({"deviceName","Version","URL"})
-    @BeforeTest
-    public void appiumTestSetupParallel(String deviceName,String Version,String URL) throws Exception{
+//    @Parameters({"deviceName","Version","URL"})
+//    @BeforeTest
+    public void appiumTestSetup(String deviceName,String Version,String URL) throws Exception{
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("deviceName",deviceName);
         capabilities.setCapability("platformName","Android");
@@ -49,18 +50,36 @@ public class TestBase {
 
 
 
-    //@BeforeSuite
+    @BeforeTest
     public void appiumBrowserTestSetup() throws Exception{
-        //chrome://inspect/devices#devices
-        //System.setProperty("webdriver.chrome.driver", "C:\\Users\\WizdomQA\\Desktop\\drivers\\chromedriver_win32\\chromedriver.exe");
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("deviceName","emulator-5554");
-        capabilities.setCapability("platformName","android");
-        capabilities.setCapability("platformVersion","10");
-        capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
-        driver = new AppiumDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        // Create object of DesiredCapabilities class and specify android platform
+        DesiredCapabilities capabilities = DesiredCapabilities.android();
+
+        // set the capability to execute test in chrome browser
+        capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, BrowserType.CHROME);
+
+        // set the capability to execute our test in Android Platform
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
+
+        // Set the device name as well (you can give any name)
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "emulator-5554");
+
+        // set the android version as well
+        capabilities.setCapability(MobileCapabilityType.VERSION, "9");
+
+        // set the chromedriver
+        capabilities.setCapability("chromedriverExecutable","C:\\drivers\\chromedriver.exe");
+
+        // Create object of URL class and specify the appium server address
+        URL url = new URL("http://127.0.0.1:4723/wd/hub");
+
+        // Create object of AndroidDriver class and pass the url and capability that we
+        // created
+        driver = new AppiumDriver(url, capabilities);
+
         driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
         driver.get("https://www.amazon.co.uk/");
+        Thread.sleep(5000);
     }
 
 //    @AfterMethod
